@@ -17,7 +17,7 @@ Some examples of range sets on the real number line:
 4. -infinity to 0, 10 to 20
 5. (the empty set)
 
-The code lives on github at: `https://github.com/axiak/py-rangeset`_.
+The code lives on github at: https://github.com/axiak/py-rangeset.
 
 Overview
 -------------
