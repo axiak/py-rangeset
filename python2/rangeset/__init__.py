@@ -30,17 +30,23 @@ class _NegativeInfinity(_Indeterminate):
 INFINITY = _Infinity()
 NEGATIVE_INFINITY = _NegativeInfinity()
 
-class RangeSet(object):
-    def __init__(self, start, end):
-        if start > end:
-            start, end = end, start
-        self.__ends = ((start, _START), (end, _END))
+_parent = collections.namedtuple('RangeSet_', ['ends'])
+
+class RangeSet(_parent):
+    def __new__(cls, start, end):
+        if end is _RAW_ENDS:
+            ends = start
+        else:
+            if start > end:
+                start, end = end, start
+            ends = ((start, _START), (end, _END))
+        return _parent.__new__(cls, ends)
 
     def __merged_ends(self, *others):
-        sorted_ends = list(self.__ends)
-        for other in others:
-            for end in RangeSet.__promote(other).__ends:
-                bisect.insort(sorted_ends, end)
+        data = (self,) + others
+        sorted_ends = list(reduce(operator.add,
+                                  (RangeSet.__promote(x).ends for x in data)))
+        sorted_ends.sort()
         return sorted_ends
 
     @classmethod
@@ -59,9 +65,7 @@ class RangeSet(object):
             elif state > 0 and end == _END:
                 continue
             new_ends.append((_, end))
-        result = RangeSet(None, None)
-        result.__ends = tuple(new_ends)
-        return result
+        return RangeSet(tuple(new_ends), _RAW_ENDS)
 
     union = __or__
 
@@ -73,9 +77,7 @@ class RangeSet(object):
                 new_ends.append((_, end))
             elif state == 1 and end == _END:
                 new_ends.append((_, end))
-        result = RangeSet(None, None)
-        result.__ends = tuple(new_ends)
-        return result
+        return RangeSet(tuple(new_ends), _RAW_ENDS)
 
     intersect = __and__
 
@@ -104,9 +106,7 @@ class RangeSet(object):
                 new_ends.append((_, _NEGATE[end]))
             elif state == 1 and end == _END:
                 new_ends.append((_, _NEGATE[end]))
-        result = RangeSet(None, None)
-        result.__ends = tuple(new_ends)
-        return result
+        return RangeSet(tuple(new_ends), _RAW_ENDS)
 
     def __contains__(self, test):
         rangeset = None
@@ -122,7 +122,7 @@ class RangeSet(object):
             return difference == rangeset
 
         last_val, last_end = None, None
-        for _, end, state in RangeSet.__iterate_state(self.__ends):
+        for _, end, state in RangeSet.__iterate_state(self.ends):
             if last_val is not None and _ > test:
                 return last_end == _START
             elif _ > test:
@@ -131,7 +131,7 @@ class RangeSet(object):
         return False
 
     def __invert__(self):
-        new_ends = list(self.__ends)
+        new_ends = list(self.ends)
         head, tail = [], []
         if new_ends[0][0] == NEGATIVE_INFINITY:
             new_ends.pop(0)
@@ -143,9 +143,8 @@ class RangeSet(object):
             tail = [(INFINITY, _END)]
         for i, value in enumerate(new_ends):
             new_ends[i] = (value[0], _NEGATE[value[1]])
-        result = RangeSet(None, None)
-        result.__ends = tuple(head + new_ends + tail)
-        return result
+        return RangeSet(tuple(head + new_ends + tail), _RAW_ENDS)
+
 
     invert = __invert__
 
@@ -159,18 +158,18 @@ class RangeSet(object):
         return RangeSet.__promote(other) - self
 
     def measure(self):
-        if isinstance(self.__ends[0][0], _Indeterminate) or isinstance(self.__ends[-1][0], _Indeterminate):
+        if isinstance(self.ends[0][0], _Indeterminate) or isinstance(self.ends[-1][0], _Indeterminate):
             raise ValueError("Cannot compute range with unlimited bounds.")
-        return reduce(operator.add, (self.__ends[i + 1][0] - self.__ends[i][0] for i in range(0, len(self.__ends), 2)))
+        return reduce(operator.add, (self.ends[i + 1][0] - self.ends[i][0] for i in range(0, len(self.ends), 2)))
 
     def range(self):
-        if isinstance(self.__ends[0][0], _Indeterminate) or isinstance(self.__ends[-1][0], _Indeterminate):
+        if isinstance(self.ends[0][0], _Indeterminate) or isinstance(self.ends[-1][0], _Indeterminate):
             raise ValueError("Cannot compute range with unlimited bounds.")
-        return self.__ends[-1][0] - self.__ends[0][0]
+        return self.ends[-1][0] - self.ends[0][0]
 
     def __str__(self):
-        pieces = ["{} -- {}".format(self.__ends[i][0], self.__ends[i + 1][0])
-                                    for i in range(0, len(self.__ends), 2)]
+        pieces = ["{} -- {}".format(self.ends[i][0], self.ends[i + 1][0])
+                                    for i in range(0, len(self.ends), 2)]
         return "<RangeSet {}>".format(", ".join(pieces))
 
     __repr__ = __str__
@@ -180,13 +179,13 @@ class RangeSet(object):
             return True
         elif not isinstance(other, RangeSet):
             return False
-        return self.__ends == other.__ends
+        return self.ends == other.ends
 
     def __ne__(self, other):
         return not self.__eq__(other)
 
     def __hash__(self):
-        return hash(self.__ends)
+        return hash(self.ends)
 
     @classmethod
     def mutual_overlaps(cls, *ranges):
@@ -202,3 +201,5 @@ _START = -1
 _END = 1
 
 _NEGATE = {_START: _END, _END: _START}
+
+_RAW_ENDS = object()
