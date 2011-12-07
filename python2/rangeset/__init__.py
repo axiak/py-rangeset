@@ -230,7 +230,13 @@ class RangeSet(_parent):
     def mutual_union(cls, *ranges):
         return cls.__promote(ranges[0]).union(*ranges[1:])
 
+    @property
+    def min(self):
+        return self.ends[0][0]
 
+    @property
+    def max(self):
+        return self.ends[-1][0]
 
 _START = -1
 _END = 1
