@@ -6,11 +6,23 @@ Rangeset is a package that allows for easy manipulation of sets of ranges. These
 
 ## Installation ##
 
+Use either:
+
     python setup.py install
 
-- or -
+
+or:
 
     pip install rangeset
+
+## Documentation ##
+
+See http://axiak.github.com/py-rangeset
+
+## License ##
+
+It's licensed under the MIT License. Please see the license file for more:
+https://github.com/axiak/py-rangeset/blob/master/LICENSE
 
 ## Basic Usage ##
 
