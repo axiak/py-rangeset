@@ -6,14 +6,65 @@
 Welcome to RangeSet documentation
 =======================================
 
-Rangeset implementation
+This module provides a RangeSet data structure. A range set is, as the
+name implies, a set of ranges. Intuitively, you could think about a
+range set as a subset of the real number line, with arbitrary gaps.
+Some examples of range sets on the real number line:
 
+1. -infinity to +infinity
+2. -1 to 1
+3. 1 to 4, 10 to 20
+4. -infinity to 0, 10 to 20
+5. (the empty set)
+
+Overview
+-------------
+
+.. toctree::
+   :maxdepth: 2
+
+
+The rangeset implementation offers immutable objects that represent the range sets as described above. The operations are largely similar to the `set object <http://docs.python.org/library/stdtypes.html#set>`_ with the obvious exception that mutating methods such as ``.add`` and ``.remove`` are not available. The main object is the ``RangeSet`` object.
 
 Reference
 ------------
 
-All of the reference information is available below:
+Static Methods
+~~~~~~~~~~~~~~~~
 
-.. toctree::
-   :maxdepth: 2
+.. staticmethod:: RangeSet(start, end) (constructor)
+
+    Simplest way to create a range, or a rangeset of a single range.
+
+    :param start: Any object that supports subtraction and ordering
+    :param end: Same type as ``start``
+
+.. staticmethod:: RangeSet.mutual_union(range1, range2, ...)
+
+    Return a rangeset which represents the mutual union of all ranges provided.
+    Example::
+
+     >>> RangeSet.mutual_union((1, 2), (3, 4))    
+     <RangeSet 1 -- 2, 3 -- 4>
+
+    :param range: Either RangeSet object or tuple of ``(start, end)``
+    :rtype: RangeSet
+
+.. staticmethod:: RangeSet.mutual_overlaps(range1, range2, ...)
+    Return a rangeset which represents the mutual intersection of all ranges.
+    Example::
+
+    >> RangeSet.mutual_overlaps((1, 5), (2, 10))
+    <RangeSet 2 -- 5>
+
+    :param range: Either RangeSet object or tuple of ``(start, end)``
+    :rtype: RangeSet
+
+
+Instance Methods
+-------------------
+
+.. method:: difference(other)
+
+   Compute the set difference between this and another rangeset.
 
