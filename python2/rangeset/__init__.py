@@ -6,6 +6,8 @@ import bisect
 import operator
 import collections
 
+VERSION = (0, 0, 2)
+
 __all__ = ('INFINITY', 'NEGATIVE_INFINITY',
            'RangeSet')
 

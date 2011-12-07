@@ -2,7 +2,7 @@ from distutils.core import setup
 import sys
 
 pkgdir = {'': 'python%s' % sys.version_info[0]}
-VERSION = '0.0.1'
+VERSION = '0.0.2'
 
 setup(name='rangeset',
       version=VERSION,
