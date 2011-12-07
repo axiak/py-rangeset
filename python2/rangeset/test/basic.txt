@@ -9,7 +9,7 @@ this will work with anything that has ordering and subtraction.
     >>> f = RangeSet(1, 2)
     >>> f | (4, 5)
     <RangeSet 1 -- 2, 4 -- 5>
-    >>> (2, 3) in (RangeSet(1, 2.5) | RangeSet(2.25, 5))
+    >>> (RangeSet(1, 2.5) | RangeSet(2.25, 5)) > (2, 3)
     True
     >>> ~f
     <RangeSet -inf -- 1, 2 -- inf>

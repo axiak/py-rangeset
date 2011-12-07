@@ -56,6 +56,16 @@ class RangeSet(_parent):
         else:
             return RangeSet(value[0], value[1])
 
+    @classmethod
+    def __iterate_state(cls, ends):
+        state = 0
+        for _, end in ends:
+            if end == _START:
+                state += 1
+            else:
+                state -= 1
+            yield _, end, state
+
     def __or__(self, *other):
         sorted_ends = self.__merged_ends(*other)
         new_ends = []
@@ -87,17 +97,7 @@ class RangeSet(_parent):
     def __rand__(self, other):
         return self.__rand__(other)
 
-    @classmethod
-    def __iterate_state(cls, ends):
-        state = 0
-        for _, end in ends:
-            if end == _START:
-                state += 1
-            else:
-                state -= 1
-            yield _, end, state
-
-    def symmetric_difference(self, *other):
+    def __xor__(self, *other):
         sorted_ends = self.__merged_ends(*other)
         new_ends = []
         old_val = None
@@ -106,21 +106,15 @@ class RangeSet(_parent):
                 new_ends.append((_, _NEGATE[end]))
             elif state == 1 and end == _END:
                 new_ends.append((_, _NEGATE[end]))
+            elif state == 1 and end == _START:
+                new_ends.append((_, end))
+            elif state == 0 and end == _END:
+                new_ends.append((_, end))
         return RangeSet(tuple(new_ends), _RAW_ENDS)
 
-    def __contains__(self, test):
-        rangeset = None
-        if isinstance(test, RangeSet):
-            rangeset = test
-        if hasattr(test, '__getitem__'):
-            try:
-                rangeset = RangeSet.__promote(test)
-            except TypeError:
-                pass
-        if rangeset is not None:
-            difference = rangeset - ~self
-            return difference == rangeset
+    symmetric_difference = __xor__
 
+    def __contains__(self, test):
         last_val, last_end = None, None
         for _, end, state in RangeSet.__iterate_state(self.ends):
             if last_val is not None and _ > test:
@@ -129,6 +123,33 @@ class RangeSet(_parent):
                 return False
             last_val, last_end = _, end
         return False
+
+    def issuperset(self, test):
+        if isinstance(test, RangeSet):
+            rangeset = test
+        else:
+            rangeset = RangeSet.__promote(test)
+        difference = rangeset - ~self
+        return difference == rangeset
+
+    __ge__ = issuperset
+
+    def __gt__(self, other):
+        return self != other and self >= other
+
+    def issubset(self, other):
+        return RangeSet.__promote(other).issuperset(self)
+
+    __le__ = issubset
+
+    def __lt__(self, other):
+        return self != other and self <= other
+
+    def isdisjoint(self, other):
+        return not bool(self & other)
+
+    def __nonzero__(self):
+        return bool(self.ends)
 
     def __invert__(self):
         new_ends = list(self.ends)
@@ -151,18 +172,25 @@ class RangeSet(_parent):
     def __sub__(self, other):
         return self & ~other
 
-    def subtract(self, other):
+    def difference(self, other):
         return self.__sub__(other)
 
     def __rsub__(self, other):
         return RangeSet.__promote(other) - self
 
+    def __len__(self):
+        return self.measure()
+
     def measure(self):
+        if not self.ends:
+            return 0
         if isinstance(self.ends[0][0], _Indeterminate) or isinstance(self.ends[-1][0], _Indeterminate):
             raise ValueError("Cannot compute range with unlimited bounds.")
         return reduce(operator.add, (self.ends[i + 1][0] - self.ends[i][0] for i in range(0, len(self.ends), 2)))
 
     def range(self):
+        if not self.ends:
+            return 0
         if isinstance(self.ends[0][0], _Indeterminate) or isinstance(self.ends[-1][0], _Indeterminate):
             raise ValueError("Cannot compute range with unlimited bounds.")
         return self.ends[-1][0] - self.ends[0][0]
@@ -178,7 +206,10 @@ class RangeSet(_parent):
         if self is other:
             return True
         elif not isinstance(other, RangeSet):
-            return False
+            try:
+                other = RangeSet.__promote(other)
+            except TypeError:
+                return False
         return self.ends == other.ends
 
     def __ne__(self, other):
