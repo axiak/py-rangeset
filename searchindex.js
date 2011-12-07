@@ -1,0 +1,1 @@
+Search.setIndex({objects:{},terms:{all:0,welcom:0,rangeset:0,avail:0,inform:0,below:0,implement:0,document:0,refer:0},objtypes:{},titles:["Welcome to RangeSet documentation"],objnames:{},filenames:["index"]})
