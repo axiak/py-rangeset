@@ -53,6 +53,7 @@ Some examples of range sets on the real number line:</p>
 <li>-infinity to 0, 10 to 20</li>
 <li>(the empty set)</li>
 </ol>
+<p>The code lives on github at: <a href="#id1"><span class="problematic" id="id2">`https://github.com/axiak/py-rangeset`_</span></a>.</p>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -244,6 +245,13 @@ rangeset. For example:</p>
 </dd></dl>
 
 </div>
+<div class="section" id="performance">
+<h2>Performance<a class="headerlink" href="#performance" title="Permalink to this headline">¶</a></h2>
+<p>Care is taken to ensure that the data structure performs fairly well. Most operations
+are worst-case <tt class="docutils literal"><span class="pre">O(n</span> <span class="pre">log</span> <span class="pre">n)</span></tt> in the number of disjoint subranges. However, since those
+operations are using Timsort on rather sorted data, the performance gets closer to <tt class="docutils literal"><span class="pre">O(n)</span></tt>.
+(An attempt at writing an in-python <tt class="docutils literal"><span class="pre">O(n)</span></tt> algorithm was much slower than Timsort.)</p>
+</div>
 </div>
 
 
@@ -262,6 +270,7 @@ rangeset. For example:</p>
 </li>
 <li><a class="reference internal" href="#attributes">Attributes</a></li>
 <li><a class="reference internal" href="#instance-methods">Instance Methods</a></li>
+<li><a class="reference internal" href="#performance">Performance</a></li>
 </ul>
 </li>
 </ul>
