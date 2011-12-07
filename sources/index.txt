@@ -26,8 +26,13 @@ Overview
 
 The rangeset implementation offers immutable objects that represent the range sets as described above. The operations are largely similar to the `set object <http://docs.python.org/library/stdtypes.html#set>`_ with the obvious exception that mutating methods such as ``.add`` and ``.remove`` are not available. The main object is the ``RangeSet`` object.
 
-Reference
-------------
+
+Exported Symbols
+~~~~~~~~~~~~~~~~
+
+1. ``RangeSet`` - The rangeset class described below
+2. ``INFINITY`` - Positive infinity, used when constructing unbound ranges.
+3. ``NEGATIVE_INFINITY`` - Negative infinity, used when constructing unbound ranges.
 
 Static Methods
 ~~~~~~~~~~~~~~~~
@@ -44,13 +49,14 @@ Static Methods
     Return a rangeset which represents the mutual union of all ranges provided.
     Example::
 
-     >>> RangeSet.mutual_union((1, 2), (3, 4))    
+     >>> RangeSet.mutual_union((1, 2), (3, 4))
      <RangeSet 1 -- 2, 3 -- 4>
 
     :param range: Either RangeSet object or tuple of ``(start, end)``
     :rtype: RangeSet
 
 .. staticmethod:: RangeSet.mutual_overlaps(range1, range2, ...)
+
     Return a rangeset which represents the mutual intersection of all ranges.
     Example::
 
@@ -60,6 +66,16 @@ Static Methods
     :param range: Either RangeSet object or tuple of ``(start, end)``
     :rtype: RangeSet
 
+Attributes
+----------------
+
+.. attribute:: min
+
+   Return the minimum point of the set. Could be negative infinity.
+
+.. attribute:: max
+
+   Return the maximum point of the set. Could be infinity.
 
 Instance Methods
 -------------------
@@ -68,3 +84,67 @@ Instance Methods
 
    Compute the set difference between this and another rangeset.
 
+   You can also use ``a - b`` as sugar for ``a.difference(b)``.
+
+   :param other: Either a RangeSet or a tuple of (start, end)
+
+.. method:: union(other)
+
+   Compute the set union between this and another rangeset or tuple.
+
+   You can also use the ``a | b`` syntax for ``a.union(b)``.
+
+.. method:: intersect(other)
+
+   Compute the set intersection between this and another rangeset or tuple.
+
+   You can also use the ``a & b`` syntax for ``a.intersect(b)``.
+
+.. method:: invert()
+
+   Invert the range set. The universe is assumed to be a line from negative
+   infinity to positive infinity, so any bounded set will have an unbounded
+   invert.
+
+   You can also use the ``~a`` syntax for ``a.invert()``.
+
+.. method:: measure()
+
+   Compute the measure for the rangeset. The measure simply means
+   the total amount of length minus the gaps. For example, a range
+   from 1 to 5 would have a measure of 4. A rangeset from 1 to 5, then
+   10 to 15 would have a measure of 9.
+
+   **N.B.** ``measure`` will raise an exception if the rangeset is unbounded.
+
+.. method:: range()
+
+   Compute the length of the rangeset by computing the difference of
+   the maximum of the rangeset minus the minimum of the rangeset. The
+   difference of the range and the measure is equal to the measure of
+   the gaps.
+
+   In other words, suppose we have the example::
+
+   >>> r = RangeSet(0, 5) | (10, 15)
+   >>> gaps = RangeSet(r.min, r.max) & ~r
+   >>> r.range() - r.measure()
+   5
+   >>> gaps.measure()
+   5
+
+   Note that to get the gaps we had to intersect with the min and max to
+   prevent getting infinite ranges.
+
+   **N.B.** ``range`` will raise an exception if the rangeset is unbounded.
+
+.. __contains__(self, element)
+
+   You can use ``elem in a`` syntax to determine if ``elem`` belongs to your
+   rangeset. For example::
+
+   >>> a = RangeSet(0, 5) | (10, 15)
+   >>> 2 in a
+   True
+   >>> 7 in a
+   False

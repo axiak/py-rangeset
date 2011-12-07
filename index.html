@@ -60,9 +60,14 @@ Some examples of range sets on the real number line:</p>
 </ul>
 </div>
 <p>The rangeset implementation offers immutable objects that represent the range sets as described above. The operations are largely similar to the <a class="reference external" href="http://docs.python.org/library/stdtypes.html#set">set object</a> with the obvious exception that mutating methods such as <tt class="docutils literal"><span class="pre">.add</span></tt> and <tt class="docutils literal"><span class="pre">.remove</span></tt> are not available. The main object is the <tt class="docutils literal"><span class="pre">RangeSet</span></tt> object.</p>
+<div class="section" id="exported-symbols">
+<h3>Exported Symbols<a class="headerlink" href="#exported-symbols" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><tt class="docutils literal"><span class="pre">RangeSet</span></tt> - The rangeset class described below</li>
+<li><tt class="docutils literal"><span class="pre">INFINITY</span></tt> - Positive infinity, used when constructing unbound ranges.</li>
+<li><tt class="docutils literal"><span class="pre">NEGATIVE_INFINITY</span></tt> - Negative infinity, used when constructing unbound ranges.</li>
+</ol>
 </div>
-<div class="section" id="reference">
-<h2>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="static-methods">
 <h3>Static Methods<a class="headerlink" href="#static-methods" title="Permalink to this headline">¶</a></h3>
 <dl class="staticmethod">
@@ -111,12 +116,11 @@ Example:</p>
 <dl class="staticmethod">
 <dt id="RangeSet.mutual_overlaps">
 <em class="property">static </em><tt class="descclassname">RangeSet.</tt><tt class="descname">mutual_overlaps</tt><big>(</big><em>range1</em>, <em>range2</em>, <em>...</em><big>)</big><a class="headerlink" href="#RangeSet.mutual_overlaps" title="Permalink to this definition">¶</a></dt>
-<dt>
-<tt class="descname">Return a rangeset which represents the mutual intersection of all ranges.</tt></dt>
-<dt>
-<tt class="descname">Example::</tt></dt>
-<dd><p>&gt;&gt; RangeSet.mutual_overlaps((1, 5), (2, 10))
-&lt;RangeSet 2 &#8211; 5&gt;</p>
+<dd><p>Return a rangeset which represents the mutual intersection of all ranges.
+Example:</p>
+<div class="highlight-python"><pre>&gt;&gt; RangeSet.mutual_overlaps((1, 5), (2, 10))</pre>
+</div>
+<p>&lt;RangeSet 2 &#8211; 5&gt;</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -135,12 +139,93 @@ Example:</p>
 
 </div>
 </div>
+<div class="section" id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<dl class="attribute">
+<dt id="min">
+<tt class="descname">min</tt><a class="headerlink" href="#min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the minimum point of the set. Could be negative infinity.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="max">
+<tt class="descname">max</tt><a class="headerlink" href="#max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the maximum point of the set. Could be infinity.</p>
+</dd></dl>
+
+</div>
 <div class="section" id="instance-methods">
 <h2>Instance Methods<a class="headerlink" href="#instance-methods" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="difference">
 <tt class="descname">difference</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#difference" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the set difference between this and another rangeset.</p>
+<p>You can also use <tt class="docutils literal"><span class="pre">a</span> <span class="pre">-</span> <span class="pre">b</span></tt> as sugar for <tt class="docutils literal"><span class="pre">a.difference(b)</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>other</strong> &#8211; Either a RangeSet or a tuple of (start, end)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="union">
+<tt class="descname">union</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#union" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the set union between this and another rangeset or tuple.</p>
+<p>You can also use the <tt class="docutils literal"><span class="pre">a</span> <span class="pre">|</span> <span class="pre">b</span></tt> syntax for <tt class="docutils literal"><span class="pre">a.union(b)</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="intersect">
+<tt class="descname">intersect</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#intersect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the set intersection between this and another rangeset or tuple.</p>
+<p>You can also use the <tt class="docutils literal"><span class="pre">a</span> <span class="pre">&amp;</span> <span class="pre">b</span></tt> syntax for <tt class="docutils literal"><span class="pre">a.intersect(b)</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="invert">
+<tt class="descname">invert</tt><big>(</big><big>)</big><a class="headerlink" href="#invert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invert the range set. The universe is assumed to be a line from negative
+infinity to positive infinity, so any bounded set will have an unbounded
+invert.</p>
+<p>You can also use the <tt class="docutils literal"><span class="pre">~a</span></tt> syntax for <tt class="docutils literal"><span class="pre">a.invert()</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="measure">
+<tt class="descname">measure</tt><big>(</big><big>)</big><a class="headerlink" href="#measure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the measure for the rangeset. The measure simply means
+the total amount of length minus the gaps. For example, a range
+from 1 to 5 would have a measure of 4. A rangeset from 1 to 5, then
+10 to 15 would have a measure of 9.</p>
+<p><strong>N.B.</strong> <tt class="docutils literal"><span class="pre">measure</span></tt> will raise an exception if the rangeset is unbounded.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="range">
+<tt class="descname">range</tt><big>(</big><big>)</big><a class="headerlink" href="#range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the length of the rangeset by computing the difference of
+the maximum of the rangeset minus the minimum of the rangeset. The
+difference of the range and the measure is equal to the measure of
+the gaps.</p>
+<p>In other words, suppose we have the example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">RangeSet</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gaps</span> <span class="o">=</span> <span class="n">RangeSet</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">min</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">max</span><span class="p">)</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">r</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">range</span><span class="p">()</span> <span class="o">-</span> <span class="n">r</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>5
+&gt;&gt;&gt; gaps.measure()
+5</p>
+<p>Note that to get the gaps we had to intersect with the min and max to
+prevent getting infinite ranges.</p>
+<p><strong>N.B.</strong> <tt class="docutils literal"><span class="pre">range</span></tt> will raise an exception if the rangeset is unbounded.</p>
 </dd></dl>
 
 </div>
@@ -156,12 +241,11 @@ Example:</p>
   <ul>
 <li><a class="reference internal" href="#">Welcome to RangeSet documentation</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#reference">Reference</a><ul>
+<li><a class="reference internal" href="#exported-symbols">Exported Symbols</a></li>
 <li><a class="reference internal" href="#static-methods">Static Methods</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
 <li><a class="reference internal" href="#instance-methods">Instance Methods</a></li>
 </ul>
 </li>
