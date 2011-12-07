@@ -152,6 +152,10 @@ class RangeSet(_parent):
         return bool(self.ends)
 
     def __invert__(self):
+        if not self.ends:
+            new_ends = ((NEGATIVE_INFINITY, _START),
+                        (INFINITY, _END))
+            return RangeSet(new_ends, _RAW_ENDS)
         new_ends = list(self.ends)
         head, tail = [], []
         if new_ends[0][0] == NEGATIVE_INFINITY:
