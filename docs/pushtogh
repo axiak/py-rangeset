@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 cd $(dirname "$0")
 make html
 
@@ -13,5 +13,6 @@ rm -rf *
 cp -r "$TEMPFILE/"* ./
 git add .
 git commit -m "Updated documents build"
+git push origin gh-pages
 git checkout master
 git stash pop
