@@ -118,9 +118,10 @@ Example:</p>
 <em class="property">static </em><tt class="descclassname">RangeSet.</tt><tt class="descname">mutual_overlaps</tt><big>(</big><em>range1</em>, <em>range2</em>, <em>...</em><big>)</big><a class="headerlink" href="#RangeSet.mutual_overlaps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a rangeset which represents the mutual intersection of all ranges.
 Example:</p>
-<div class="highlight-python"><pre>&gt;&gt; RangeSet.mutual_overlaps((1, 5), (2, 10))</pre>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">RangeSet</span><span class="o">.</span><span class="n">mutual_overlaps</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="go">&lt;RangeSet 2 -- 5&gt;</span>
+</pre></div>
 </div>
-<p>&lt;RangeSet 2 &#8211; 5&gt;</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -218,14 +219,28 @@ the gaps.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">RangeSet</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">gaps</span> <span class="o">=</span> <span class="n">RangeSet</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">min</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">max</span><span class="p">)</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">r</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">range</span><span class="p">()</span> <span class="o">-</span> <span class="n">r</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>
+<span class="go">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gaps</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>
+<span class="go">5</span>
 </pre></div>
 </div>
-<p>5
-&gt;&gt;&gt; gaps.measure()
-5</p>
 <p>Note that to get the gaps we had to intersect with the min and max to
 prevent getting infinite ranges.</p>
 <p><strong>N.B.</strong> <tt class="docutils literal"><span class="pre">range</span></tt> will raise an exception if the rangeset is unbounded.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="__contains__">
+<tt class="descname">__contains__</tt><big>(</big><em>element</em><big>)</big><a class="headerlink" href="#__contains__" title="Permalink to this definition">¶</a></dt>
+<dd><p>You can use <tt class="docutils literal"><span class="pre">elem</span> <span class="pre">in</span> <span class="pre">a</span></tt> syntax to determine if <tt class="docutils literal"><span class="pre">elem</span></tt> belongs to your
+rangeset. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">RangeSet</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">2</span> <span class="ow">in</span> <span class="n">a</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">7</span> <span class="ow">in</span> <span class="n">a</span>
+<span class="go">False</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
