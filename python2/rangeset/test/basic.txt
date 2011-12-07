@@ -1,0 +1,46 @@
+
+Basic test of the rangeset data structure
+=========================================
+
+Note that even though I use integers for convenience,
+this will work with anything that has ordering and subtraction.
+(So yes, datetime objects just work.)
+
+    >>> from rangeset import *
+    >>> f = RangeSet(1, 2)
+    >>> f | (4, 5)
+    <RangeSet 1 -- 2, 4 -- 5>
+    >>> (2, 3) in (RangeSet(1, 2.5) | RangeSet(2.25, 5))
+    True
+    >>> ~f
+    <RangeSet -inf -- 1, 2 -- inf>
+    >>> f.invert()
+    <RangeSet -inf -- 1, 2 -- inf>
+    >>> f.measure()
+    1
+    >>> f = f | (4, 10)
+    >>> f
+    <RangeSet 1 -- 2, 4 -- 10>
+    >>> f.measure()
+    7
+    >>> f.range()
+    9
+    >>> (~f) & (1, 2)
+    <RangeSet 1 -- 1, 2 -- 2>
+    >>> (~f) & (0, 3)
+    <RangeSet 0 -- 1, 2 -- 3>
+    >>> (-3, -1) in (~f)
+    True
+    >>> 2 in f
+    False
+    >>> 1.5 in f
+    True
+    >>> RangeSet.mutual_overlaps((1, 2), (3, 10), (4, 6))
+    <RangeSet 4 -- 6>
+    >>> RangeSet.mutual_union((1, 2), (3, 10), (4, 15))
+    <RangeSet 1 -- 2, 3 -- 15>
+    >>> a = RangeSet.mutual_union((1, 2), (3, 10), (4, 15))
+    >>> (~a) == a
+    False
+    >>> (~a) == (~a)
+    True
