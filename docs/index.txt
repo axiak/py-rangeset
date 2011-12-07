@@ -17,6 +17,8 @@ Some examples of range sets on the real number line:
 4. -infinity to 0, 10 to 20
 5. (the empty set)
 
+The code lives on github at: `https://github.com/axiak/py-rangeset`_.
+
 Overview
 -------------
 
@@ -149,3 +151,10 @@ Instance Methods
     >>> 7 in a
     False
 
+Performance
+-------------
+
+Care is taken to ensure that the data structure performs fairly well. Most operations
+are worst-case ``O(n log n)`` in the number of disjoint subranges. However, since those
+operations are using Timsort on rather sorted data, the performance gets closer to ``O(n)``.
+(An attempt at writing an in-python ``O(n)`` algorithm was much slower than Timsort.)
