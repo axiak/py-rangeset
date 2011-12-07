@@ -60,8 +60,8 @@ Static Methods
     Return a rangeset which represents the mutual intersection of all ranges.
     Example::
 
-    >> RangeSet.mutual_overlaps((1, 5), (2, 10))
-    <RangeSet 2 -- 5>
+     >>> RangeSet.mutual_overlaps((1, 5), (2, 10))
+     <RangeSet 2 -- 5>
 
     :param range: Either RangeSet object or tuple of ``(start, end)``
     :rtype: RangeSet
@@ -126,25 +126,26 @@ Instance Methods
 
    In other words, suppose we have the example::
 
-   >>> r = RangeSet(0, 5) | (10, 15)
-   >>> gaps = RangeSet(r.min, r.max) & ~r
-   >>> r.range() - r.measure()
-   5
-   >>> gaps.measure()
-   5
+    >>> r = RangeSet(0, 5) | (10, 15)
+    >>> gaps = RangeSet(r.min, r.max) & ~r
+    >>> r.range() - r.measure()
+    5
+    >>> gaps.measure()
+    5
 
    Note that to get the gaps we had to intersect with the min and max to
    prevent getting infinite ranges.
 
    **N.B.** ``range`` will raise an exception if the rangeset is unbounded.
 
-.. __contains__(self, element)
+.. method:: __contains__(element)
 
    You can use ``elem in a`` syntax to determine if ``elem`` belongs to your
    rangeset. For example::
 
-   >>> a = RangeSet(0, 5) | (10, 15)
-   >>> 2 in a
-   True
-   >>> 7 in a
-   False
+    >>> a = RangeSet(0, 5) | (10, 15)
+    >>> 2 in a
+    True
+    >>> 7 in a
+    False
+
