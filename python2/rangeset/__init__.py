@@ -95,7 +95,7 @@ class RangeSet(_parent):
         return self.__or__(other)
 
     def __rand__(self, other):
-        return self.__rand__(other)
+        return self.__and__(other)
 
     def __xor__(self, *other):
         sorted_ends = self.__merged_ends(*other)

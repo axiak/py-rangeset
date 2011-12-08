@@ -1,0 +1,2 @@
+0.0.3 2011-12-8)
+  - Fixed infinite recursion in __rand__                [BUG]
