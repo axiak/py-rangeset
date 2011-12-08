@@ -1,3 +1,4 @@
 0.0.3 2011-12-8)
   - Fixed infinite recursion in __rand__                [BUG]
   - Added __rxor__ method.                              [FEATURE]
+  - Fix infinite comparison with datetime objects.      [BUG]
