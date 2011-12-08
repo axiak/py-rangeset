@@ -4,33 +4,44 @@ Range of time stuff
 
 import bisect
 import operator
+import functools
 import collections
 
-VERSION = (0, 0, 2)
+VERSION = (0, 0, 3)
 
 __all__ = ('INFINITY', 'NEGATIVE_INFINITY',
            'RangeSet')
 
-class _Indeterminate(object):
-    pass
+_parent = collections.namedtuple('RangeSet_', ['ends'])
 
+class _Indeterminate(object):
+    def timetuple(self):
+        return ()
+    def __eq__(self, other):
+        return other is self
+
+@functools.total_ordering
 class _Infinity(_Indeterminate):
-    def __cmp__(self, other):
-        return 0 if other is self else 1
+    def __lt__(self, other):
+        return False
+    def __gt__(self, other):
+        return True
     def __str__(self):
         return 'inf'
+    __repr__ = __str__
 
+@functools.total_ordering
 class _NegativeInfinity(_Indeterminate):
-    def __cmp__(self, other):
-        return 0 if other is self else -1
+    def __lt__(self, other):
+        return True
+    def __gt__(self, other):
+        return False
     def __str__(self):
         return '-inf'
-
+    __repr__ = __str__
 
 INFINITY = _Infinity()
 NEGATIVE_INFINITY = _NegativeInfinity()
-
-_parent = collections.namedtuple('RangeSet_', ['ends'])
 
 class RangeSet(_parent):
     def __new__(cls, start, end):
@@ -119,13 +130,15 @@ class RangeSet(_parent):
 
     def __contains__(self, test):
         last_val, last_end = None, None
+        if not self.ends:
+            return False
         for _, end, state in RangeSet.__iterate_state(self.ends):
             if last_val is not None and _ > test:
                 return last_end == _START
             elif _ > test:
                 return False
             last_val, last_end = _, end
-        return False
+        return self.ends[-1][0] == test
 
     def issuperset(self, test):
         if isinstance(test, RangeSet):
@@ -177,7 +190,7 @@ class RangeSet(_parent):
     invert = __invert__
 
     def __sub__(self, other):
-        return self & ~other
+        return self & ~RangeSet.__promote(other)
 
     def difference(self, other):
         return self.__sub__(other)
@@ -247,3 +260,4 @@ _END = 1
 _NEGATE = {_START: _END, _END: _START}
 
 _RAW_ENDS = object()
+
