@@ -83,7 +83,7 @@ class RangeSet(_parent):
     def __merged_ends(self, *others):
         sorted_ends = list(self.ends)
         for other in others:
-            sorted_ends.extend(other.ends)
+            sorted_ends.extend(RangeSet.__coerce(other).ends)
         sorted_ends.sort()
         return sorted_ends
 
@@ -167,7 +167,9 @@ class RangeSet(_parent):
         if isinstance(test, _Indeterminate):
             return False
         for _, end, state in RangeSet.__iterate_state(self.ends):
-            if last_val is not None and _ > test:
+            if _ == test:
+                return True
+            elif last_val is not None and _ > test:
                 return last_end == _START
             elif _ > test:
                 return False
