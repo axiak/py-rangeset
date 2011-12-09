@@ -1,3 +1,7 @@
+0.0.4 2011-12-9)
+  - Added minimum kwarg to the mutual_overlaps method   [FEATURE]
+  - Raises a LogicError if a person tries to make a (INFINITY, INFINITY) bound [FEATURE]
+
 0.0.3 2011-12-8)
   - Fixed infinite recursion in __rand__                [BUG]
   - Added __rxor__ method.                              [FEATURE]
