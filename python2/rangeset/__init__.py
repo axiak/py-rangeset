@@ -117,13 +117,16 @@ class RangeSet(_parent):
 
     union = __or__
 
-    def __and__(self, *other):
+    def __and__(self, *other, **kwargs):
+        min_overlap = kwargs.pop('minimum', 2)
+        if kwargs:
+            raise ValueError("kwargs is not empty: {}".format(kwargs))
         sorted_ends = self.__merged_ends(*other)
         new_ends = []
         for _, end, state in RangeSet.__iterate_state(sorted_ends):
-            if state == 2 and end == _START:
+            if state == min_overlap and end == _START:
                 new_ends.append((_, end))
-            elif state == 1 and end == _END:
+            elif state == (min_overlap - 1) and end == _END:
                 new_ends.append((_, end))
         return RangeSet(tuple(new_ends), _RAW_ENDS)
 
@@ -268,8 +271,11 @@ class RangeSet(_parent):
         return hash(self.ends)
 
     @classmethod
-    def mutual_overlaps(cls, *ranges):
-        return cls.__promote(ranges[0]).intersect(*ranges[1:])
+    def mutual_overlaps(cls, *ranges, **kwargs):
+        minimum = kwargs.pop('minimum', 2)
+        if kwargs:
+            raise ValueError("kwargs is not empty: {}".format(kwargs))
+        return cls.__promote(ranges[0]).intersect(*ranges[1:], minimum=minimum)
 
     @classmethod
     def mutual_union(cls, *ranges):

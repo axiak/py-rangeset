@@ -14,6 +14,14 @@ Basic construction of rangesets for single ranges:
     <RangeSet -inf -- inf>
     >>> RangeSet(0, 0)
     <RangeSet 0 -- 0>
+    >>> RangeSet(INFINITY, INFINITY)
+    Traceback (most recent call last):
+        ...
+    rangeset.LogicError: A range cannot consist of a single end the line.
+    >>> RangeSet(NEGATIVE_INFINITY, NEGATIVE_INFINITY)
+    Traceback (most recent call last):
+        ...
+    rangeset.LogicError: A range cannot consist of a single end the line.
 
 Static Methods
 =========================
@@ -33,6 +41,14 @@ more interesting ones:
     <RangeSet -8 -- 5>
     >>> RangeSet.mutual_overlaps(RangeSet(-10, 20), RangeSet(-8, 20), RangeSet(-5, 20))
     <RangeSet -8 -- 20>
+    >>> RangeSet.mutual_overlaps(RangeSet(-10, 20), RangeSet(-8, 20), RangeSet(-5, 20), minimum=1)
+    <RangeSet -10 -- 20>
+    >>> RangeSet.mutual_overlaps(RangeSet(-10, 20), RangeSet(-8, 20), RangeSet(-5, 20), minimum=2)
+    <RangeSet -8 -- 20>
+    >>> RangeSet.mutual_overlaps(RangeSet(-10, 20), RangeSet(-8, 20), RangeSet(-5, 20), minimum=3)
+    <RangeSet -5 -- 20>
+    >>> RangeSet.mutual_overlaps(RangeSet(-10, 20), RangeSet(-8, 20), RangeSet(-5, 20), minimum=4)
+    <RangeSet >
 
 Logical Combinations
 ==========================

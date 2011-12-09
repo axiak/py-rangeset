@@ -22,10 +22,6 @@ The code lives on github at: https://github.com/axiak/py-rangeset.
 Overview
 -------------
 
-.. toctree::
-   :maxdepth: 2
-
-
 The rangeset implementation offers immutable objects that represent the range sets as described above. The operations are largely similar to the `set object <http://docs.python.org/library/stdtypes.html#set>`_ with the obvious exception that mutating methods such as ``.add`` and ``.remove`` are not available. The main object is the ``RangeSet`` object.
 
 
@@ -57,7 +53,7 @@ Static Methods
     :param range: Either RangeSet object or tuple of ``(start, end)``
     :rtype: RangeSet
 
-.. staticmethod:: RangeSet.mutual_overlaps(range1, range2, ...)
+.. staticmethod:: RangeSet.mutual_overlaps(range1, range2, ...[, minimum=2])
 
     Return a rangeset which represents the mutual intersection of all ranges.
     Example::
@@ -65,7 +61,33 @@ Static Methods
      >>> RangeSet.mutual_overlaps((1, 5), (2, 10))
      <RangeSet 2 -- 5>
 
+    Note that, unlike the mutual union, this method is not equivalent to the
+    intersection of all subranges. This method will, by default, return all ranges
+    that have at least 2 ranges overlapping. However, this generalizes to any number
+    of overlaps. The best way to picture this is a venn diagram of all subranges.
+    If ``minimum`` is equal to the number of ranges, then this method will return
+    the center of that venn diagram. This example is illustrative::
+
+     >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10))
+     <RangeSet -15 -- 10>
+     >>> RangeSet(-20, 10) & (-15, 10) &  (-10, 10) & (-5, 10) &  (0, 10)<RangeSet 0 -- 10>
+     >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10))
+     <RangeSet -15 -- 10>
+     # A mimimum of 1 is just the union:
+     >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10), minimum=1)
+     <RangeSet -20 -- 10>
+     >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10), minimum=3)
+     <RangeSet -10 -- 10>
+     >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10), minimum=4)
+     <RangeSet -5 -- 10>
+     >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10), minimum=5)
+     <RangeSet 0 -- 10>
+     # There is no intersection with 6 ranges, since there are 5 ranges:
+     >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10), minimum=6)
+     <RangeSet >
+
     :param range: Either RangeSet object or tuple of ``(start, end)``
+    :param minimum: Optional keyword argument to say how many ranges need to overlap to qualify.
     :rtype: RangeSet
 
 Attributes
