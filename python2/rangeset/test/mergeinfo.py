@@ -2,6 +2,7 @@ import timeit
 import random
 import bisect
 import operator
+import itertools
 
 test_data = [None]
 
@@ -31,6 +32,20 @@ def chain_and_sort():
     merged.sort()
     return merged
 
+def chain_and_sort2():
+    data = test_data[0]
+    merged = list(itertools.chain.from_iterable(data))
+    merged.sort()
+    return merged
+
+def chain_and_sort3():
+    data = test_data[0]
+    merged = []
+    for item in data:
+        merged.extend(item)
+    merged.sort()
+    return merged
+
 def build_manually():
     data = test_data[0]
     result = [None] * sum(len(x) for x in data)
@@ -45,6 +60,6 @@ def build_manually():
 
 if __name__ == '__main__':
     generate_test_data()
-    for test in ('bisect_test', 'chain_and_sort', 'build_manually'):
+    for test in ('chain_and_sort', 'chain_and_sort2', 'chain_and_sort3'):
         t = timeit.Timer("%s()" % test, "from __main__ import %s" % test)
-        print t.timeit(number=10000)
+        print '{}: {}'.format(test, t.timeit(number=10000))

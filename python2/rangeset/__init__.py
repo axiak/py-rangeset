@@ -81,18 +81,20 @@ class RangeSet(_parent):
         return _parent.__new__(cls, ends)
 
     def __merged_ends(self, *others):
-        data = (self,) + others
-        sorted_ends = list(reduce(operator.add,
-                                  (RangeSet.__promote(x).ends for x in data)))
+        sorted_ends = list(self.ends)
+        for other in others:
+            sorted_ends.extend(other.ends)
         sorted_ends.sort()
         return sorted_ends
 
     @classmethod
-    def __promote(cls, value):
+    def __coerce(cls, value):
         if isinstance(value, RangeSet):
             return value
+        elif isinstance(value, tuple) and len(value) == 2:
+            return cls(value[0], value[1])
         else:
-            return RangeSet(value[0], value[1])
+            return cls.mutual_union(*[(x, x) for x in value])
 
     @classmethod
     def __iterate_state(cls, ends):
@@ -176,7 +178,7 @@ class RangeSet(_parent):
         if isinstance(test, RangeSet):
             rangeset = test
         else:
-            rangeset = RangeSet.__promote(test)
+            rangeset = RangeSet.__coerce(test)
         difference = rangeset - ~self
         return difference == rangeset
 
@@ -186,7 +188,7 @@ class RangeSet(_parent):
         return self != other and self >= other
 
     def issubset(self, other):
-        return RangeSet.__promote(other).issuperset(self)
+        return RangeSet.__coerce(other).issuperset(self)
 
     __le__ = issubset
 
@@ -222,13 +224,13 @@ class RangeSet(_parent):
     invert = __invert__
 
     def __sub__(self, other):
-        return self & ~RangeSet.__promote(other)
+        return self & ~RangeSet.__coerce(other)
 
     def difference(self, other):
         return self.__sub__(other)
 
     def __rsub__(self, other):
-        return RangeSet.__promote(other) - self
+        return RangeSet.__coerce(other) - self
 
     def __len__(self):
         return self.measure()
@@ -259,7 +261,7 @@ class RangeSet(_parent):
             return True
         elif not isinstance(other, RangeSet):
             try:
-                other = RangeSet.__promote(other)
+                other = RangeSet.__coerce(other)
             except TypeError:
                 return False
         return self.ends == other.ends
@@ -275,11 +277,11 @@ class RangeSet(_parent):
         minimum = kwargs.pop('minimum', 2)
         if kwargs:
             raise ValueError("kwargs is not empty: {}".format(kwargs))
-        return cls.__promote(ranges[0]).intersect(*ranges[1:], minimum=minimum)
+        return cls.__coerce(ranges[0]).intersect(*ranges[1:], minimum=minimum)
 
     @classmethod
     def mutual_union(cls, *ranges):
-        return cls.__promote(ranges[0]).union(*ranges[1:])
+        return cls.__coerce(ranges[0]).union(*ranges[1:])
 
     @property
     def min(self):
