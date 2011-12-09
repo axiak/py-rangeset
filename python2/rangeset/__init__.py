@@ -1,5 +1,29 @@
 """
-Range of time stuff
+This module provides a RangeSet data structure. A range set is, as the
+name implies, a set of ranges. Intuitively, you could think about a
+range set as a subset of the real number line, with arbitrary gaps.
+Some examples of range sets on the real number line:
+
+1. -infinity to +infinity
+2. -1 to 1
+3. 1 to 4, 10 to 20
+4. -infinity to 0, 10 to 20
+5. (the empty set)
+
+The code lives on github at: https://github.com/axiak/py-rangeset.
+
+Overview
+-------------
+
+.. toctree::
+   :maxdepth: 2
+
+
+The rangeset implementation offers immutable objects that represent the range
+sets as described above. The operations are largely similar to the
+`set object <http://docs.python.org/library/stdtypes.html#set>`_ with the
+obvious exception that mutating methods such as ``.add`` and ``.remove``
+are not available. The main object is the ``RangeSet`` object.
 """
 
 import bisect
@@ -48,6 +72,9 @@ class RangeSet(_parent):
         if end is _RAW_ENDS:
             ends = start
         else:
+            if isinstance(start, _Indeterminate) and isinstance(end, _Indeterminate) and \
+                    start == end:
+                raise LogicError("A range cannot consist of a single end the line.")
             if start > end:
                 start, end = end, start
             ends = ((start, _START), (end, _END))
@@ -131,6 +158,8 @@ class RangeSet(_parent):
     def __contains__(self, test):
         last_val, last_end = None, None
         if not self.ends:
+            return False
+        if isinstance(test, _Indeterminate):
             return False
         for _, end, state in RangeSet.__iterate_state(self.ends):
             if last_val is not None and _ > test:
@@ -261,3 +290,6 @@ _NEGATE = {_START: _END, _END: _START}
 
 _RAW_ENDS = object()
 
+
+class LogicError(ValueError):
+    pass
