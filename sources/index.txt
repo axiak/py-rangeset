@@ -1,0 +1,182 @@
+.. Python rangeset documentation master file, created by
+   sphinx-quickstart on Wed Mar 31 16:25:58 2010.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to RangeSet documentation
+=======================================
+
+This module provides a RangeSet data structure. A range set is, as the
+name implies, a set of ranges. Intuitively, you could think about a
+range set as a subset of the real number line, with arbitrary gaps.
+Some examples of range sets on the real number line:
+
+1. -infinity to +infinity
+2. -1 to 1
+3. 1 to 4, 10 to 20
+4. -infinity to 0, 10 to 20
+5. (the empty set)
+
+The code lives on github at: https://github.com/axiak/py-rangeset.
+
+Overview
+-------------
+
+The rangeset implementation offers immutable objects that represent the range sets as described above. The operations are largely similar to the `set object <http://docs.python.org/library/stdtypes.html#set>`_ with the obvious exception that mutating methods such as ``.add`` and ``.remove`` are not available. The main object is the ``RangeSet`` object.
+
+
+Exported Symbols
+~~~~~~~~~~~~~~~~
+
+1. ``RangeSet`` - The rangeset class described below
+2. ``INFINITY`` - Positive infinity, used when constructing unbound ranges.
+3. ``NEGATIVE_INFINITY`` - Negative infinity, used when constructing unbound ranges.
+
+Static Methods
+~~~~~~~~~~~~~~~~
+
+.. staticmethod:: RangeSet(start, end) (constructor)
+
+    Simplest way to create a range, or a rangeset of a single range.
+
+    :param start: Any object that supports subtraction and ordering
+    :param end: Same type as ``start``
+
+.. staticmethod:: RangeSet.mutual_union(range1, range2, ...)
+
+    Return a rangeset which represents the mutual union of all ranges provided.
+    Example::
+
+     >>> RangeSet.mutual_union((1, 2), (3, 4))
+     <RangeSet 1 -- 2, 3 -- 4>
+
+    :param range: Either RangeSet object or tuple of ``(start, end)``
+    :rtype: RangeSet
+
+.. staticmethod:: RangeSet.mutual_overlaps(range1, range2, ...[, minimum=2])
+
+    Return a rangeset which represents the mutual intersection of all ranges.
+    Example::
+
+     >>> RangeSet.mutual_overlaps((1, 5), (2, 10))
+     <RangeSet 2 -- 5>
+
+    Note that, unlike the mutual union, this method is not equivalent to the
+    intersection of all subranges. This method will, by default, return all ranges
+    that have at least 2 ranges overlapping. However, this generalizes to any number
+    of overlaps. The best way to picture this is a venn diagram of all subranges.
+    If ``minimum`` is equal to the number of ranges, then this method will return
+    the center of that venn diagram. This example is illustrative::
+
+     >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10))
+     <RangeSet -15 -- 10>
+     >>> RangeSet(-20, 10) & (-15, 10) &  (-10, 10) & (-5, 10) &  (0, 10)<RangeSet 0 -- 10>
+     >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10))
+     <RangeSet -15 -- 10>
+     # A mimimum of 1 is just the union:
+     >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10), minimum=1)
+     <RangeSet -20 -- 10>
+     >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10), minimum=3)
+     <RangeSet -10 -- 10>
+     >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10), minimum=4)
+     <RangeSet -5 -- 10>
+     >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10), minimum=5)
+     <RangeSet 0 -- 10>
+     # There is no intersection with 6 ranges, since there are 5 ranges:
+     >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10), minimum=6)
+     <RangeSet >
+
+    :param range: Either RangeSet object or tuple of ``(start, end)``
+    :param minimum: Optional keyword argument to say how many ranges need to overlap to qualify.
+    :rtype: RangeSet
+
+Attributes
+----------------
+
+.. attribute:: min
+
+   Return the minimum point of the set. Could be negative infinity.
+
+.. attribute:: max
+
+   Return the maximum point of the set. Could be infinity.
+
+Instance Methods
+-------------------
+
+.. method:: difference(other)
+
+   Compute the set difference between this and another rangeset.
+
+   You can also use ``a - b`` as sugar for ``a.difference(b)``.
+
+   :param other: Either a RangeSet or a tuple of (start, end)
+
+.. method:: union(other)
+
+   Compute the set union between this and another rangeset or tuple.
+
+   You can also use the ``a | b`` syntax for ``a.union(b)``.
+
+.. method:: intersect(other)
+
+   Compute the set intersection between this and another rangeset or tuple.
+
+   You can also use the ``a & b`` syntax for ``a.intersect(b)``.
+
+.. method:: invert()
+
+   Invert the range set. The universe is assumed to be a line from negative
+   infinity to positive infinity, so any bounded set will have an unbounded
+   invert.
+
+   You can also use the ``~a`` syntax for ``a.invert()``.
+
+.. method:: measure()
+
+   Compute the measure for the rangeset. The measure simply means
+   the total amount of length minus the gaps. For example, a range
+   from 1 to 5 would have a measure of 4. A rangeset from 1 to 5, then
+   10 to 15 would have a measure of 9.
+
+   **N.B.** ``measure`` will raise an exception if the rangeset is unbounded.
+
+.. method:: range()
+
+   Compute the length of the rangeset by computing the difference of
+   the maximum of the rangeset minus the minimum of the rangeset. The
+   difference of the range and the measure is equal to the measure of
+   the gaps.
+
+   In other words, suppose we have the example::
+
+    >>> r = RangeSet(0, 5) | (10, 15)
+    >>> gaps = RangeSet(r.min, r.max) & ~r
+    >>> r.range() - r.measure()
+    5
+    >>> gaps.measure()
+    5
+
+   Note that to get the gaps we had to intersect with the min and max to
+   prevent getting infinite ranges.
+
+   **N.B.** ``range`` will raise an exception if the rangeset is unbounded.
+
+.. method:: __contains__(element)
+
+   You can use ``elem in a`` syntax to determine if ``elem`` belongs to your
+   rangeset. For example::
+
+    >>> a = RangeSet(0, 5) | (10, 15)
+    >>> 2 in a
+    True
+    >>> 7 in a
+    False
+
+Performance
+-------------
+
+Care is taken to ensure that the data structure performs fairly well. Most operations
+are worst-case ``O(n log n)`` in the number of disjoint subranges. However, since those
+operations are using Timsort on rather sorted data, the performance gets closer to ``O(n)``.
+(An attempt at writing an in-python ``O(n)`` algorithm was much slower than Timsort.)
