@@ -26,6 +26,7 @@ https://github.com/axiak/py-rangeset/blob/master/LICENSE
 
 ## Basic Usage ##
 
+```python
     import rangeset
 
     # Create a rangeset
@@ -42,5 +43,6 @@ https://github.com/axiak/py-rangeset/blob/master/LICENSE
     # range - Total distance between start and end
     >>> ((~r) & RangeSet(0, 10)).range()
     10
+```
 
 For more usage examples, see the doctests at https://github.com/axiak/py-rangeset/tree/master/python2/rangeset/test
