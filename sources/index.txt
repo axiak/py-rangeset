@@ -19,6 +19,11 @@ Some examples of range sets on the real number line:
 
 The code lives on github at: https://github.com/axiak/py-rangeset.
 
+See full examples in the doctest directory:
+
+- https://github.com/axiak/py-rangeset/blob/master/python2/rangeset/test/basic.txt
+- https://github.com/axiak/py-rangeset/blob/master/python2/rangeset/test/datetime.txt
+
 Overview
 -------------
 
@@ -70,10 +75,11 @@ Static Methods
 
      >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10))
      <RangeSet -15 -- 10>
-     >>> RangeSet(-20, 10) & (-15, 10) &  (-10, 10) & (-5, 10) &  (0, 10)<RangeSet 0 -- 10>
+     >>> RangeSet(-20, 10) & (-15, 10) &  (-10, 10) & (-5, 10) &  (0, 10)
+     <RangeSet 0 -- 10>
      >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10))
      <RangeSet -15 -- 10>
-     # A mimimum of 1 is just the union:
+     >>> # A mimimum of 1 is just the union:
      >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10), minimum=1)
      <RangeSet -20 -- 10>
      >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10), minimum=3)
@@ -82,7 +88,7 @@ Static Methods
      <RangeSet -5 -- 10>
      >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10), minimum=5)
      <RangeSet 0 -- 10>
-     # There is no intersection with 6 ranges, since there are 5 ranges:
+     >>> # There is no intersection with 6 ranges, since there are 5 ranges:
      >>> RangeSet.mutual_overlaps((-20, 10), (-15, 10), (-10, 10), (-5, 10), (0, 10), minimum=6)
      <RangeSet >
 

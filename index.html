@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to RangeSet documentation &mdash; rangeset v0.0.3 documentation</title>
+    <title>Welcome to RangeSet documentation &mdash; rangeset v0.0.4 documentation</title>
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.0.3',
+        VERSION:     '0.0.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="static/jquery.js"></script>
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
-    <link rel="top" title="rangeset v0.0.3 documentation" href="#" /> 
+    <link rel="top" title="rangeset v0.0.4 documentation" href="#" /> 
   </head>
   <body>
     <div class="related">
@@ -31,7 +31,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="#">rangeset v0.0.3 documentation</a> &raquo;</li> 
+        <li><a href="#">rangeset v0.0.4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -54,6 +54,11 @@ Some examples of range sets on the real number line:</p>
 <li>(the empty set)</li>
 </ol>
 <p>The code lives on github at: <a class="reference external" href="https://github.com/axiak/py-rangeset">https://github.com/axiak/py-rangeset</a>.</p>
+<p>See full examples in the doctest directory:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/axiak/py-rangeset/blob/master/python2/rangeset/test/basic.txt">https://github.com/axiak/py-rangeset/blob/master/python2/rangeset/test/basic.txt</a></li>
+<li><a class="reference external" href="https://github.com/axiak/py-rangeset/blob/master/python2/rangeset/test/datetime.txt">https://github.com/axiak/py-rangeset/blob/master/python2/rangeset/test/datetime.txt</a></li>
+</ul>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>The rangeset implementation offers immutable objects that represent the range sets as described above. The operations are largely similar to the <a class="reference external" href="http://docs.python.org/library/stdtypes.html#set">set object</a> with the obvious exception that mutating methods such as <tt class="docutils literal"><span class="pre">.add</span></tt> and <tt class="docutils literal"><span class="pre">.remove</span></tt> are not available. The main object is the <tt class="docutils literal"><span class="pre">RangeSet</span></tt> object.</p>
@@ -127,10 +132,11 @@ If <tt class="docutils literal"><span class="pre">minimum</span></tt> is equal t
 the center of that venn diagram. This example is illustrative:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">RangeSet</span><span class="o">.</span><span class="n">mutual_overlaps</span><span class="p">((</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
 <span class="go">&lt;RangeSet -15 -- 10&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">RangeSet</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="o">&amp;</span>  <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="o">&amp;</span>  <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span><span class="o">&lt;</span><span class="n">RangeSet</span> <span class="mi">0</span> <span class="o">--</span> <span class="mi">10</span><span class="o">&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">RangeSet</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="o">&amp;</span>  <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="o">&amp;</span>  <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="go">&lt;RangeSet 0 -- 10&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">RangeSet</span><span class="o">.</span><span class="n">mutual_overlaps</span><span class="p">((</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
 <span class="go">&lt;RangeSet -15 -- 10&gt;</span>
-<span class="go"># A mimimum of 1 is just the union:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># A mimimum of 1 is just the union:</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">RangeSet</span><span class="o">.</span><span class="n">mutual_overlaps</span><span class="p">((</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">minimum</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">&lt;RangeSet -20 -- 10&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">RangeSet</span><span class="o">.</span><span class="n">mutual_overlaps</span><span class="p">((</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">minimum</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
@@ -139,7 +145,7 @@ the center of that venn diagram. This example is illustrative:</p>
 <span class="go">&lt;RangeSet -5 -- 10&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">RangeSet</span><span class="o">.</span><span class="n">mutual_overlaps</span><span class="p">((</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">minimum</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="go">&lt;RangeSet 0 -- 10&gt;</span>
-<span class="go"># There is no intersection with 6 ranges, since there are 5 ranges:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># There is no intersection with 6 ranges, since there are 5 ranges:</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">RangeSet</span><span class="o">.</span><span class="n">mutual_overlaps</span><span class="p">((</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">minimum</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
 <span class="go">&lt;RangeSet &gt;</span>
 </pre></div>
@@ -325,7 +331,7 @@ operations are using Timsort on rather sorted data, the performance gets closer 
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li><a href="#">rangeset v0.0.3 documentation</a> &raquo;</li> 
+        <li><a href="#">rangeset v0.0.4 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
