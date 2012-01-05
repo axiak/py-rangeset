@@ -246,3 +246,16 @@ Superset/subset checking:
     False
     >>> RangeSet(-1000, 10000) < (NEGATIVE_INFINITY, INFINITY)
     True
+
+Iterable
+===============
+
+Iterating over the rangeset will yield tuples for start-end of the
+ranges, possibly including INFINITY or NEGATIVE_INFINITY.
+
+    >>> a = (20, 70) ^ RangeSet(0, 100) ^ (2, 30)
+    >>> list(a)
+    [(0, 2), (20, 30), (70, 100)]
+
+    >>> [x for x in ~(RangeSet(0, 1) | RangeSet(2, 3))]
+    [(-inf, 0), (1, 2), (3, inf)]

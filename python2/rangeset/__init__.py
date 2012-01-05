@@ -293,6 +293,11 @@ class RangeSet(_parent):
     def max(self):
         return self.ends[-1][0]
 
+    def __iter__(self):
+        ends_copy = list(self.ends)
+        for i in range(0, len(ends_copy), 2):
+            yield (ends_copy[i][0], ends_copy[i + 1][0])
+
 _START = -1
 _END = 1
 
