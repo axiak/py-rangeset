@@ -1,20 +1,26 @@
-from distutils.core import setup
+try:
+    from setuptools import setup
+    test = True
+except ImportError:
+    test = False
+    from distutils.core import setup
 import sys
 import os
 
 pkgdir = {'': 'python%s' % sys.version_info[0]}
-VERSION = '0.0.5'
 
+sys.path.insert(0, pkgdir[''])
 
-def run_test():
-    sys.path.insert(0, os.path.join(os.path.dirname(__file__),
-                                    pkgdir['']))
-    from rangeset.test import test
-    test.runtest()
+import rangeset
+
+VERSION = '.'.join(str(c) for c in rangeset.__version__)
+
+kwargs = {}
+
+if test:
+    kwargs['test_suite'] = 'rangeset.test.test.suite'
 
 def main():
-    if 'test' in sys.argv[1:]:
-        return run_test()
     setup(name='rangeset',
           version=VERSION,
           author='Mike Axiak',
@@ -25,7 +31,6 @@ def main():
           long_description=""" """,
           package_dir=pkgdir,
           packages=['rangeset'],
-          #package_data={'rangeset': ['*.txt']},
           classifiers=[
             'Development Status :: 2 - Pre-Alpha',
             'License :: OSI Approved :: MIT License',
@@ -33,6 +38,7 @@ def main():
             'Programming Language :: Python',
             'Topic :: Software Development :: Libraries',
             ],
+          **kwargs
           )
 
 if __name__ == '__main__':
