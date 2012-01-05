@@ -179,6 +179,11 @@ Instance Methods
     >>> 7 in a
     False
 
+.. method:: __iter__()
+
+   This method makes it so that you can iterate over the rangeset to obtain
+   individual (START, END) tuples for each contiguous range within the rangeset.
+
 Performance
 -------------
 
