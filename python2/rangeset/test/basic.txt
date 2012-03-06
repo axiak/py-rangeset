@@ -163,8 +163,6 @@ There are 4 interesting properties of rangesets:
 - range(): The difference of the maximum and the minimum
 - measure(): The sum of the ranges of the maximally connected ranges
 
-Note: len() is a shortcut for .measure()
-
     >>> a = RangeSet(0, 100)
     >>> a.max
     100
@@ -178,8 +176,6 @@ Note: len() is a shortcut for .measure()
     >>> a.range()
     60
     >>> a.measure()
-    40
-    >>> len(a)
     40
 
 Note that range and measure are meaningless for unbounded ranges:

@@ -94,8 +94,6 @@ There are 4 interesting properties of rangesets:
 - range(): The difference of the maximum and the minimum
 - measure(): The sum of the ranges of the maximally connected ranges
 
-Note: The len() shortcut doesn't work for non-integers.
-
     >>> a = RangeSet(D(2010, 11, 10), NOW)
     >>> a.max
     datetime.datetime(2011, 12, 8, 12, 30)
@@ -112,10 +110,6 @@ Note: The len() shortcut doesn't work for non-integers.
     datetime.timedelta(0, 60780)
     >>> a.measure()
     datetime.timedelta(0, 53580)
-    >>> len(a)
-    Traceback (most recent call last):
-        ...
-    TypeError: an integer is required
 
 Note that range and measure are meaningless for unbounded ranges:
 

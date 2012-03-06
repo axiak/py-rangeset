@@ -234,9 +234,6 @@ class RangeSet(_parent):
     def __rsub__(self, other):
         return RangeSet.__coerce(other) - self
 
-    def __len__(self):
-        return self.measure()
-
     def measure(self):
         if not self.ends:
             return 0
