@@ -62,4 +62,4 @@ if __name__ == '__main__':
     generate_test_data()
     for test in ('chain_and_sort', 'chain_and_sort2', 'chain_and_sort3'):
         t = timeit.Timer("%s()" % test, "from __main__ import %s" % test)
-        print '{}: {}'.format(test, t.timeit(number=10000))
+        print '{0}: {1}'.format(test, t.timeit(number=10000))

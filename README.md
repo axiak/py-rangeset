@@ -1,5 +1,7 @@
 # rangeset - A utility belt for operations on sets of ranges #
 
+[![Build Status](https://secure.travis-ci.org/axiak/py-rangeset.png?branch=master)](http://travis-ci.org/axiak/py-rangeset)
+
 ## Overview ##
 
 Rangeset is a package that allows for easy manipulation of sets of ranges. These ranges can contain any ordered elements, be they numbers, tuples, or even datetime objects.

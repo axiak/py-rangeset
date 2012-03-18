@@ -6,7 +6,7 @@ import os
 def runtest():
     for f in glob.glob(os.path.join(os.path.dirname(__file__),
                                     '*.txt')):
-        print "Testing {}".format(f)
+        print "Testing {0}".format(f)
         doctest.testfile(os.path.basename(f))
 
 def suite():
