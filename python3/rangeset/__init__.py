@@ -237,7 +237,15 @@ class RangeSet(_parent):
             return 0
         if isinstance(self.ends[0][0], _Indeterminate) or isinstance(self.ends[-1][0], _Indeterminate):
             raise ValueError("Cannot compute range with unlimited bounds.")
-        return reduce(operator.add, (self.ends[i + 1][0] - self.ends[i][0] for i in range(0, len(self.ends), 2)))
+        result = None
+        # reduce would be really nice here... :(
+        for i in range(0, len(self.ends), 2):
+            val = self.ends[i + 1][0] - self.ends[i][0]
+            if result is None:
+                result = val
+            else:
+                result += val
+        return result
 
     def range(self):
         if not self.ends:
