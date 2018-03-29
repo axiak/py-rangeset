@@ -11,9 +11,7 @@ pkgdir = {'': 'python%s' % sys.version_info[0]}
 
 sys.path.insert(0, pkgdir[''])
 
-import rangeset
-
-VERSION = '.'.join(str(c) for c in rangeset.__version__)
+VERSION = '0.0.7'
 
 kwargs = {}
 
@@ -31,6 +29,9 @@ def main():
           long_description=""" """,
           package_dir=pkgdir,
           packages=['rangeset'],
+          install_requires=[
+            'blist'
+          ],
           classifiers=[
             'Development Status :: 2 - Pre-Alpha',
             'License :: OSI Approved :: MIT License',

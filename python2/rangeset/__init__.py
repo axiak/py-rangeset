@@ -31,7 +31,7 @@ import operator
 import functools
 import collections
 
-__version__ = (0, 0, 6)
+__version__ = (0, 0, 7)
 
 __all__ = ('INFINITY', 'NEGATIVE_INFINITY',
            'RangeSet')
