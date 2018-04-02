@@ -14,14 +14,6 @@ Basic construction of rangesets for single ranges:
     <RangeSet -inf -- inf>
     >>> RangeSet(0, 0)
     <RangeSet 0 -- 0>
-    >>> RangeSet(INFINITY, INFINITY)
-    Traceback (most recent call last):
-        ...
-    LogicError: A range cannot consist of a single end the line.
-    >>> RangeSet(NEGATIVE_INFINITY, NEGATIVE_INFINITY)
-    Traceback (most recent call last):
-        ...
-    LogicError: A range cannot consist of a single end the line.
 
 Static Methods
 =========================

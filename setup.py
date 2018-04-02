@@ -7,11 +7,7 @@ except ImportError:
 import sys
 import os
 
-pkgdir = {'': 'python%s' % sys.version_info[0]}
-
-sys.path.insert(0, pkgdir[''])
-
-VERSION = '0.0.7'
+VERSION = '0.0.8'
 
 kwargs = {}
 
@@ -27,7 +23,7 @@ def main():
           description='A data structure for dealing with sets of ranges.',
           license='MIT',
           long_description=""" """,
-          package_dir=pkgdir,
+          #package_dir= {'': 'python%s' % sys.version_info[0]},
           packages=['rangeset'],
           install_requires=[
             'blist'
