@@ -30,7 +30,7 @@ import operator
 import functools
 import collections
 
-__version__ = (0, 0, 9)
+__version__ = (0, 0, 10)
 
 __all__ = ('INFINITY', 'NEGATIVE_INFINITY',
            'RangeSet')
@@ -344,7 +344,10 @@ class RangeSet(_parent):
 
     def __iter__(self):
         for i in range(0, len(self.ends), 2):
-            yield (self.ends[i][0], self.ends[i + 1][0])
+            try:
+                yield (self.ends[i][0], self.ends[i + 1][0])
+            except:
+                raise TypeError("Got invalid ends: {}".format(self.ends[i:i + 2]))
 
 _START = -1
 _END = 1
