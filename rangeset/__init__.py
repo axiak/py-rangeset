@@ -30,12 +30,10 @@ import operator
 import functools
 import collections
 
-__version__ = (0, 0, 10)
+__version__ = (0, 0, 11)
 
 __all__ = ('INFINITY', 'NEGATIVE_INFINITY',
            'RangeSet')
-
-_parent = collections.namedtuple('RangeSet_', ['ends'])
 
 class _Indeterminate(object):
     def timetuple(self):
@@ -64,8 +62,12 @@ class _NegativeInfinity(_Indeterminate):
 INFINITY = _Infinity()
 NEGATIVE_INFINITY = _NegativeInfinity()
 
-class RangeSet(_parent):
-    def __new__(cls, start, end):
+
+class RangeSet(object):
+
+    __slots__ = ['ends']
+
+    def __init__(self, start, end):
         if isinstance(end, _RawEnd):
             ends = start
         else:
@@ -75,9 +77,9 @@ class RangeSet(_parent):
             if start > end:
                 start, end = end, start
             ends = blist.sortedlist([(start, _START), (end, _END)])
-        return _parent.__new__(cls, ends)
+        object.__setattr__(self, "ends", ends)
 
-    def __getnewargs__(self):
+    def __getinitargs__(self):
         return (self.ends, _RAW_ENDS)
 
     def __merged_ends(self, *others):
@@ -140,6 +142,8 @@ class RangeSet(_parent):
     union = __or__
 
 
+    def __setattr__(self, name, value):
+        raise AttributeError("This class does not support setting values.")
 
     def __iand__(self, *other, **kwargs):
         min_overlap = kwargs.pop('minimum', 2)
