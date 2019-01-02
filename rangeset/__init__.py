@@ -30,7 +30,7 @@ import operator
 import functools
 import collections
 
-__version__ = (0, 0, 8)
+__version__ = (0, 0, 9)
 
 __all__ = ('INFINITY', 'NEGATIVE_INFINITY',
            'RangeSet')
@@ -66,7 +66,7 @@ NEGATIVE_INFINITY = _NegativeInfinity()
 
 class RangeSet(_parent):
     def __new__(cls, start, end):
-        if end is _RAW_ENDS:
+        if isinstance(end, _RawEnd):
             ends = start
         else:
             if isinstance(start, _Indeterminate) and isinstance(end, _Indeterminate) and \
@@ -76,6 +76,9 @@ class RangeSet(_parent):
                 start, end = end, start
             ends = blist.sortedlist([(start, _START), (end, _END)])
         return _parent.__new__(cls, ends)
+
+    def __getnewargs__(self):
+        return (self.ends, _RAW_ENDS)
 
     def __merged_ends(self, *others):
         sorted_ends = blist.sortedlist(self.ends)
@@ -348,7 +351,11 @@ _END = 1
 
 _NEGATE = {_START: _END, _END: _START}
 
-_RAW_ENDS = object()
+
+class _RawEnd(object):
+    pass
+
+_RAW_ENDS = _RawEnd()
 
 
 class LogicError(ValueError):
