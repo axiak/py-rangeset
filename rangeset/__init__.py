@@ -144,7 +144,7 @@ class RangeSet(_parent):
     def __iand__(self, *other, **kwargs):
         min_overlap = kwargs.pop('minimum', 2)
         if kwargs:
-            raise ValueError("kwargs is not empty: {}".format(kwargs))
+            raise ValueError("kwargs is not empty: {0}".format(kwargs))
         sorted_ends = self.__merged_ends_inplace(*other)
         new_ends = []
         for _, end, state in RangeSet.__iterate_state(sorted_ends):
@@ -158,7 +158,7 @@ class RangeSet(_parent):
     def __and__(self, *other, **kwargs):
         min_overlap = kwargs.pop('minimum', 2)
         if kwargs:
-            raise ValueError("kwargs is not empty: {}".format(kwargs))
+            raise ValueError("kwargs is not empty: {0}".format(kwargs))
         sorted_ends = self.__merged_ends(*other)
         new_ends = []
         for _, end, state in RangeSet.__iterate_state(sorted_ends):
@@ -297,9 +297,9 @@ class RangeSet(_parent):
         return self.ends[-1][0] - self.ends[0][0]
 
     def __str__(self):
-        pieces = ["{} -- {}".format(self.ends[i][0], self.ends[i + 1][0])
+        pieces = ["{0} -- {1}".format(self.ends[i][0], self.ends[i + 1][0])
                                     for i in range(0, len(self.ends), 2)]
-        return "<RangeSet {}>".format(", ".join(pieces))
+        return "<RangeSet {0}>".format(", ".join(pieces))
 
     __repr__ = __str__
 
@@ -323,7 +323,7 @@ class RangeSet(_parent):
     def mutual_overlaps(cls, *ranges, **kwargs):
         minimum = kwargs.pop('minimum', 2)
         if kwargs:
-            raise ValueError("kwargs is not empty: {}".format(kwargs))
+            raise ValueError("kwargs is not empty: {0}".format(kwargs))
         return cls.__coerce(ranges[0]).intersect(*ranges[1:], minimum=minimum)
 
     @classmethod
@@ -347,7 +347,7 @@ class RangeSet(_parent):
             try:
                 yield (self.ends[i][0], self.ends[i + 1][0])
             except:
-                raise TypeError("Got invalid ends: {}".format(self.ends[i:i + 2]))
+                raise TypeError("Got invalid ends: {0}".format(self.ends[i:i + 2]))
 
 _START = -1
 _END = 1
