@@ -7,12 +7,13 @@ except ImportError:
 import sys
 import os
 
-VERSION = '0.0.11'
+VERSION = '0.0.13'
 
 kwargs = {}
 
 if test:
     kwargs['test_suite'] = 'rangeset.test.test.suite'
+
 
 def main():
     setup(name='rangeset',
@@ -26,7 +27,7 @@ def main():
           #package_dir= {'': 'python%s' % sys.version_info[0]},
           packages=['rangeset'],
           install_requires=[
-            'blist'
+            'sortedcontainers'
           ],
           classifiers=[
             'Development Status :: 2 - Pre-Alpha',
@@ -37,6 +38,7 @@ def main():
             ],
           **kwargs
           )
+
 
 if __name__ == '__main__':
     main()

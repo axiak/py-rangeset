@@ -25,7 +25,7 @@ sets as described above. The operations are largely similar to the
 obvious exception that mutating methods such as ``.add`` and ``.remove``
 are not available. The main object is the ``RangeSet`` object.
 """
-import blist
+import sortedcontainers
 import operator
 import functools
 import collections
@@ -76,14 +76,14 @@ class RangeSet(object):
                 raise LogicError("A range cannot consist of a single end the line.")
             if start > end:
                 start, end = end, start
-            ends = blist.sortedlist([(start, _START), (end, _END)])
+            ends = sortedcontainers.SortedList([(start, _START), (end, _END)])
         object.__setattr__(self, "ends", ends)
 
     def __getinitargs__(self):
         return (self.ends, _RAW_ENDS)
 
     def __merged_ends(self, *others):
-        sorted_ends = blist.sortedlist(self.ends)
+        sorted_ends = sortedcontainers.SortedList(self.ends)
         for other in others:
             for end in RangeSet.__coerce(other).ends:
                 sorted_ends.add(end)
@@ -95,7 +95,6 @@ class RangeSet(object):
             for end in RangeSet.__coerce(other).ends:
                 sorted_ends.add(end)
         return sorted_ends
-
 
     @classmethod
     def __coerce(cls, value):
@@ -125,7 +124,7 @@ class RangeSet(object):
             elif state > 0 and end == _END:
                 continue
             new_ends.append((_, end))
-        return RangeSet(blist.sortedlist(new_ends), _RAW_ENDS)
+        return RangeSet(sortedcontainers.SortedList(new_ends), _RAW_ENDS)
 
 
     def __ior__(self, *other):
@@ -156,7 +155,7 @@ class RangeSet(object):
                 new_ends.append((_, end))
             elif state == (min_overlap - 1) and end == _END:
                 new_ends.append((_, end))
-        return RangeSet(blist.sortedlist(new_ends), _RAW_ENDS)
+        return RangeSet(sortedcontainers.SortedList(new_ends), _RAW_ENDS)
 
 
     def __and__(self, *other, **kwargs):
@@ -170,7 +169,7 @@ class RangeSet(object):
                 new_ends.append((_, end))
             elif state == (min_overlap - 1) and end == _END:
                 new_ends.append((_, end))
-        return RangeSet(blist.sortedlist(new_ends), _RAW_ENDS)
+        return RangeSet(sortedcontainers.SortedList(new_ends), _RAW_ENDS)
 
     intersect = __and__
 
@@ -196,7 +195,7 @@ class RangeSet(object):
                 new_ends.append((_, end))
             elif state == 0 and end == _END:
                 new_ends.append((_, end))
-        return RangeSet(blist.sortedlist(new_ends), _RAW_ENDS)
+        return RangeSet(sortedcontainers.SortedList(new_ends), _RAW_ENDS)
 
     symmetric_difference = __xor__
 
@@ -250,7 +249,7 @@ class RangeSet(object):
             new_ends = ((NEGATIVE_INFINITY, _START),
                         (INFINITY, _END))
             return RangeSet(new_ends, _RAW_ENDS)
-        new_ends = blist.sortedlist(self.ends)
+        new_ends = sortedcontainers.SortedList(self.ends)
         head, tail = [], []
         if new_ends[0][0] == NEGATIVE_INFINITY:
             new_ends.pop(0)
@@ -260,7 +259,7 @@ class RangeSet(object):
             new_ends.pop(-1)
         else:
             tail = [(INFINITY, _END)]
-        new_ends = blist.sortedlist((value[0], _NEGATE[value[1]])
+        new_ends = sortedcontainers.SortedList((value[0], _NEGATE[value[1]])
                                     for value in new_ends)
         new_ends.update(head)
         new_ends.update(tail)
@@ -336,7 +335,7 @@ class RangeSet(object):
 
     @classmethod
     def empty(cls):
-        return cls(blist.sortedlist(), _RAW_ENDS)
+        return cls(sortedcontainers.SortedList(), _RAW_ENDS)
 
     @property
     def min(self):

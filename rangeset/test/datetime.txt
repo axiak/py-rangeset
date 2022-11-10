@@ -100,16 +100,16 @@ There are 4 interesting properties of rangesets:
     >>> a.min
     datetime.datetime(2010, 11, 10, 0, 0)
     >>> a.range()
-    datetime.timedelta(393, 45000)
+    datetime.timedelta(days=393, seconds=45000)
     >>> a.measure()
-    datetime.timedelta(393, 45000)
+    datetime.timedelta(days=393, seconds=45000)
     >>> a = RangeSet(D(2011, 12, 8, 6, 30), NOW) | RangeSet(D(2011, 12, 8, 14, 30), D(2011, 12, 8, 23, 23))
     >>> a
     <RangeSet 2011-12-08 06:30:00 -- 2011-12-08 12:30:00, 2011-12-08 14:30:00 -- 2011-12-08 23:23:00>
     >>> a.range()
-    datetime.timedelta(0, 60780)
+    datetime.timedelta(seconds=60780)
     >>> a.measure()
-    datetime.timedelta(0, 53580)
+    datetime.timedelta(seconds=53580)
 
 Note that range and measure are meaningless for unbounded ranges:
 
